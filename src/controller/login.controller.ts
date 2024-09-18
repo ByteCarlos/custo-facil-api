@@ -12,9 +12,11 @@ export class loginController {
   @Get('login')
   login(@Res() res: Response, @Req() req: Request) {
     this.loginService.loginUser(String(req.query.email), String(req.query.pass)).then((result: returnData) => {
-      if (result.status == 406) throw result;
+      if (result.status === 406 || result.status === 503) throw result;
+      // console.log(result);
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
+      // console.log(err);
       res.status(err.status).send(err.message);
     });
   }
