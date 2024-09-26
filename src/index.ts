@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import http from 'http';
-import routes from './src/routes/index.js';
+import routes from './routes/index.js';
 import cors, { CorsOptions } from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
