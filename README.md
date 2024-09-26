@@ -40,7 +40,7 @@ A **Custo Fácil API** é uma API desenvolvida em **TypeScript** utilizando **No
 
 6. Criar diretório do código compilado
     ```bash
-    mkdir dist
+    mkdir public
 
 7. Compile o código TypeScript
     ```bash
