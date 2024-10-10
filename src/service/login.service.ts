@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Error, Model } from "sequelize";
 import { INTEGER, ENUM, STRING, TEXT } from "sequelize";
 import { sequelize } from "src/sequelize/config.sequelize";
+import * as bcrypt from 'bcrypt';
 
 // definição inicial da tabela de usuario, mas sera modificada e adicionada em um arquivo proprio
 const Users = sequelize.define('users', {
@@ -95,15 +96,22 @@ export class loginService {
     const dataUser = new returnData;
     await Users.findOne({
       where: {
-        email: email,
-        password: pass,
+        email: email
       },
       include: Departments,
     }).then((user: Model<User>) => {
-      
+
+      function verifyPass(passVerify: string): boolean {
+        // const hash: string = bcrypt.hashSync(String(pass), 10);
+        const value: boolean = bcrypt.compareSync(String(pass), passVerify);
+        console.log(value);
+        // console.log(hash);
+        return value;
+      }
+
       if (user == null) {
         throw "erro ao buscar usuario";
-      } else if ((user.dataValues.email === email) && (user.dataValues.password === pass)) {
+      } else if ((user.dataValues.email === email) && (verifyPass(String(user.dataValues.password))) === true) {
         dataUser.status = 200;
         // aqui eu irei modificar para retornar o token
         dataUser.data = {
@@ -111,8 +119,12 @@ export class loginService {
           department: user.dataValues.department.department_name,
           token: "token de acesso",
         }
+        
+      } else {
+        throw "usuario ou senha incorreto";
       }
     }).catch((err: Error) => {
+      // console.log(err);
       if (err.name) {
         dataUser.status = 503;
         dataUser.message = err.name;
