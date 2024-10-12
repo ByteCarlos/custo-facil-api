@@ -4,6 +4,6 @@ require('dotenv/config');
 
 const port: number | string = process.env.PORT_MAIN;
 
-NestFactory.create(AppModule).then(app => {app.listen(port)});
+NestFactory.create(AppModule, {cors: false}).then(app => {app.listen(port)});
 
 // forma padrão de utilização com um exemplo inicial
