@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Error, Model } from "sequelize";
-import { Users, User, returnData, Departments} from "src/model/login.model";
+import { Users, User, returnData, Departments, Roles} from "src/model";
 import * as bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken";
 require('dotenv/config');
@@ -10,15 +10,19 @@ export class loginService {
   async loginUser(email: String, pass: String): Promise<Object> {
     const dataUser = new returnData;
     await Users.findOne({
+      // attributes: ['id', 'name', 'role_fk', 'department_fk'],
       where: {
         email: email
       },
-      include: Departments,
+      include: [Departments, Roles],
     }).then((user: Model<User>) => {
+      // console.log(user);
 
       // fiz essa funcao mas normalmente adiciono condicoes que retornam booleano diretamente no if
       function verifyPass(passVerify: string): boolean {
         const value: boolean = bcrypt.compareSync(String(pass), passVerify);
+        // caso precisem criar senhas, apenas retirem esse comando do comentario e realizem uma req
+        // console.log(bcrypt.hashSync(String(pass), 10));
         return value;
       }
 
@@ -29,8 +33,9 @@ export class loginService {
         
         dataUser.data = {
           nome: user.dataValues.name,
-          department: user.dataValues.department.department_name,
-          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.department_name}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
+          department: user.dataValues.department.name,
+          role: user.dataValues.role.name,
+          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.name}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
         }
         
       } else {

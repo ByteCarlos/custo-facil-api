@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Post, Req, Res } from '@nestjs/common';
 import { loginService } from 'src/service';
 import { Response, Request } from "express";
 import { returnData } from 'src/model/login.model';
@@ -8,9 +8,9 @@ export class loginController {
 
   constructor (private readonly loginService: loginService) {}
 
-  @Get('login')
+  @Post('login')
   login(@Res() res: Response, @Req() req: Request) {
-    this.loginService.loginUser(String(req.query.email), String(req.query.pass)).then((result: returnData) => {
+    this.loginService.loginUser(String(req.body.email), String(req.body.pass)).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
