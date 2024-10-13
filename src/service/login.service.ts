@@ -16,7 +16,7 @@ export class loginService {
       },
       include: [Departments, Roles],
     }).then((user: Model<User>) => {
-      console.log(user);
+      // console.log(user);
 
       // fiz essa funcao mas normalmente adiciono condicoes que retornam booleano diretamente no if
       function verifyPass(passVerify: string): boolean {

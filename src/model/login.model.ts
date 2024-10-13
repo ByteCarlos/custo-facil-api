@@ -1,6 +1,4 @@
-import { Departments } from "./db/departments.model";
-import { Roles } from "./db/roles.model";
-import { Users } from "./db/users.model";
+import { Departments, Roles, Users } from './db';
 
 Users.belongsTo(Departments, {
   foreignKey: 'department_fk',
@@ -13,6 +11,14 @@ Users.belongsTo(Roles, {
   onDelete: 'NO ACTION',
   onUpdate: 'NO ACTION',
 });
+
+/*
+No contexto de bancos de dados, has_many e belongs_to são termos que indicam diferentes tipos de associações entre modelos:
+
+has_many: Indica uma associação um-para-muitos (1:N). Por exemplo, a associação "Article hasMany Comments" permite que comentários sejam associados a artigos quando o artigo é carregado.
+
+belongs_to: Indica um relacionamento um-para-um (1:1). 
+*/
 
 class Department {
   id: number;
@@ -32,11 +38,4 @@ export class User {
   password: String;
   department: Department;
   role: Role;
-}
-
-// planejo treansformar em um padrao para retorno de data para o front
-export class returnData {
-  status: number;
-  data?: Object;
-  message?: String;
 }
