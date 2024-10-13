@@ -1,7 +1,7 @@
 import { sequelize } from "src/sequelize/config.sequelize";
 import { INTEGER, STRING } from "sequelize";
 
-export const Roles = sequelize.define('roles', {
+export const Action = sequelize.define('actions', {
   id: {
     type: INTEGER,
     autoIncrement: true,
@@ -11,7 +11,7 @@ export const Roles = sequelize.define('roles', {
   name: {
     type: STRING(100),
     allowNull: false,
-  }
+  },
 }, {
   timestamps: false,
 });

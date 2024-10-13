@@ -1,22 +1,25 @@
 import { sequelize } from "src/sequelize/config.sequelize";
-import { INTEGER, TEXT, STRING } from "sequelize";
+import { DATE, INTEGER } from "sequelize";
 
-export const Departments = sequelize.define('department', {
+export const Logs = sequelize.define('logs', {
   id: {
     type: INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  name: {
-    type: STRING(100),
-    allowNull: false,
-  },
-  description: {
-    type: TEXT,
+  user_fk: {
+    type: INTEGER,
     allowNull: true,
   },
+  log_timestamp: {
+    type: DATE,
+    allowNull: false,
+  },
+  action_fk: {
+    type: INTEGER,
+    allowNull: true,
+  }
 }, {
-  freezeTableName: true,
   timestamps: false,
 });

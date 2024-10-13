@@ -1,5 +1,5 @@
 import { sequelize } from "src/sequelize/config.sequelize";
-import { INTEGER, TEXT } from "sequelize";
+import { INTEGER, STRING} from "sequelize";
 
 export const Users = sequelize.define('users', {
   id: {
@@ -9,15 +9,15 @@ export const Users = sequelize.define('users', {
     allowNull: false,
   },
   name: {
-    type: TEXT,
+    type: STRING(100),
     allowNull: false,
   },
   email: {
-    type: TEXT,
+    type: STRING(100),
     allowNull: false,
   },
   password: {
-    type: TEXT,
+    type: STRING(100),
     allowNull: false,
   },
   role_fk: {
