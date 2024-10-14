@@ -1,4 +1,4 @@
-import { sequelize } from "src/sequelize/config.sequelize";
+import { sequelize } from "../sequelize/config.sequelize";
 import { INTEGER, ENUM, STRING, TEXT } from "sequelize";
 
 // decisao mais logica nesse caso é definir o modelo do banco na aqui model

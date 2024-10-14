@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module/app.module';
-require('dotenv/config');
+import 'dotenv/config';
 
-const port: number | string = process.env.PORT_MAIN;
-
-NestFactory.create(AppModule, {cors: false}).then(app => {app.listen(port)});
-
-// forma padrão de utilização com um exemplo inicial
+async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    await app.listen(3000);
+}
+bootstrap();
