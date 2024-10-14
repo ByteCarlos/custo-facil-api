@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Error, Model } from "sequelize";
-import { Users, User, returnData, Departments, Roles} from "src/model";
+import { Users, User, returnData, Departments, Roles} from "../model";
 import * as bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken";
 require('dotenv/config');

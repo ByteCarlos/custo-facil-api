@@ -1,4 +1,4 @@
-import { sequelize } from "src/sequelize/config.sequelize";
+import { sequelize } from "../sequelize/config.sequelize";
 import { INTEGER, ENUM, STRING, TEXT, FLOAT, DATEONLY } from "sequelize";
 
 export const custos = sequelize.define("custs", {

@@ -1,7 +1,7 @@
 import { Controller, Post, Req, Res } from '@nestjs/common';
-import { loginService } from 'src/service';
+import { loginService } from '../service';
 import { Response, Request } from "express";
-import { returnData } from 'src/model/login.model';
+import { returnData } from '../model/login.model';
 
 @Controller()
 export class loginController {
