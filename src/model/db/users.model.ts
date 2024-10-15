@@ -1,4 +1,4 @@
-import { sequelize } from "../sequelize/config.sequelize";
+import { sequelize } from "../../sequelize/config.sequelize";
 import { INTEGER, STRING} from "sequelize";
 
 export const Users = sequelize.define('users', {

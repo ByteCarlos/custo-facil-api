@@ -1,4 +1,4 @@
-import { sequelize } from "../sequelize/config.sequelize";
+import { sequelize } from "../../sequelize/config.sequelize";
 import { DATEONLY, INTEGER, STRING } from "sequelize";
 
 export const MonthlyPeriod = sequelize.define('monthlyperiod', {
