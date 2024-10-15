@@ -8,7 +8,7 @@ require('dotenv/config');
 @Injectable()
 export class loginService {
   async loginUser(email: String, pass: String): Promise<Object> {
-    const dataUser = new returnData;
+    const dataUser = new returnData();
     await Users.findOne({
       // attributes: ['id', 'name', 'role_fk', 'department_fk'],
       where: {

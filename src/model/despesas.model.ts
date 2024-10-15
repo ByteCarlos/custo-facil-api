@@ -1,28 +1,28 @@
 import { Cost, Category, MonthlyPeriod, Departments } from './db';
 
 // category
-Category.hasMany(Cost, {
-  foreignKey: "category_fk",
+Category.belongsTo(Cost, {
+  foreignKey: "id",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION",
 });
 
-Cost.belongsTo(Category, {
-  foreignKey: "category_fk",
+Cost.hasMany(Category, {
+  foreignKey: "id",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION",
 });
 // category
 
 // department
-Departments.hasMany(Cost, {
-  foreignKey: "department_fk",
+Departments.belongsTo(Cost, {
+  foreignKey: "id",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION", 
 });
 
-Cost.belongsTo(Departments, {
-  foreignKey: "department_fk",
+Cost.hasMany(Departments, {
+  foreignKey: "id",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION", 
 });
@@ -30,13 +30,13 @@ Cost.belongsTo(Departments, {
 
 // periodo mensal
 MonthlyPeriod.belongsTo(Cost, {
-  foreignKey: "monthly_period_fk",
+  foreignKey: "id",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION", 
 });
 
 Cost.belongsTo(MonthlyPeriod, {
-  foreignKey: "monthly_period_fk",
+  foreignKey: "id",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION", 
 });

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Error } from 'sequelize';
+import { Error, Model } from 'sequelize';
 import { Cost, Costs, Category, MonthlyPeriod, Departments, returnData } from '../model';
 
 @Injectable()
 export class despesasService {
-  async despesas(data: Body & Costs): Promise<Object> {
+  async insertDespesas(data: Body & Costs): Promise<Object> {
     // console.log(data);
 
     const insertCost = new Costs();
@@ -29,6 +29,7 @@ export class despesasService {
       // console.log(result);
 
       dataUser.status = 201;
+      // aqui não é necessario dizer que é um tipo objeto já que esta sendo diretamente atribuido
       dataUser.data = {
         msg: "Dados inseridos",
       };
@@ -42,6 +43,35 @@ export class despesasService {
         // por hora não irei definir os tipos para retornar o status e o codigo de erro corretos
         dataUser.status = 503;
         dataUser.message = "Erro ao inserir dados, contate o ADM assim que possivel\n" + err.message;
+      }
+    });
+
+    return { ...dataUser };
+  };
+
+  async getAllDepesas(): Promise<Object> {
+    const dataUser = new returnData();
+    //  aqui é necessario definir que é um array já que na classe returnData, data pode atribuir dois tipos. (quase uma super posição kkkk)
+    dataUser.data = [];
+
+    await Cost.findAll({
+      include: [Category, MonthlyPeriod, Departments],
+    }).then((result: Model<Costs>[]) => {
+      // console.log(result);
+      dataUser.status = 200;
+      result.forEach((dataCost: Model<Costs>) => {
+        (dataUser.data as Array<Object>).push(dataCost.dataValues);
+      });
+
+    }).catch((err: Error) => {
+      console.log(err);
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao requisitar dados\n" + err.message;
+      } else {
+        // por hora não irei definir os tipos para retornar o status e o codigo de erro corretos
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM assim que possivel\n" + err.message;
       }
     });
 
