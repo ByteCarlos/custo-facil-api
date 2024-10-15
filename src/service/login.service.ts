@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Error, Model } from "sequelize";
-import { Users, User, returnData, Departments, Roles} from "src/model";
+import { Users, User, returnData, Departments, Roles} from "../model";
 import * as bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken";
 require('dotenv/config');
@@ -35,7 +35,7 @@ export class loginService {
           nome: user.dataValues.name,
           department: user.dataValues.department.name,
           role: user.dataValues.role.name,
-          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.name}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
+          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.id}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
         }
         
       } else {

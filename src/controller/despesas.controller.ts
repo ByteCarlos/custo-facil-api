@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { despesasService} from 'src/service';
+import { despesasService } from '../service';
 import { Response, Request } from "express";
-import { returnData } from 'src/model';
+import { returnData } from '../model';
 
 @Controller()
 export class despesasController {
@@ -10,7 +10,7 @@ export class despesasController {
 
   @Post('despesas')
   despesas(@Res() res: Response, @Req() req: Request) {
-    this.loginService.despesas().then((result: returnData) => {
+    this.loginService.despesas(req.body).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {

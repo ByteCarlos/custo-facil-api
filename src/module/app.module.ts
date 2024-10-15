@@ -1,7 +1,7 @@
 import { Module, MiddlewareConsumer, RequestMethod  } from '@nestjs/common';
 import { AppController, loginController, despesasController } from '../controller';
 import { AppService, loginService, despesasService } from '../service';
-import { CheckToken } from 'src/middleware/checkToken.middleware';
+import { CheckToken } from '../middleware/checkToken.middleware';
 
 // @Module({
 //   imports: [],

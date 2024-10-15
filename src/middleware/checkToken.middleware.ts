@@ -17,7 +17,7 @@ export class CheckToken implements NestMiddleware {
         // realizar discusao futuramente para decisao sobre a insersao de logs no sistema
         // os logs podem ser inseridos diretamente no middleware e a cada sucesso ou erro ocorre
         // a manipulacao de logs dependendo do que se vai fazer no sistema
-        console.log(decoded);
+        // console.log(decoded);
         next();
       }
     });

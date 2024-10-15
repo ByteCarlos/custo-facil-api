@@ -1,7 +1,22 @@
 import { Departments, Roles, Users } from './db';
 
+// departmente
+Departments.hasMany(Users, {
+  foreignKey: 'department_fk',
+  onDelete: 'NO ACTION',
+  onUpdate: 'NO ACTION',
+});
+
 Users.belongsTo(Departments, {
   foreignKey: 'department_fk',
+  onDelete: 'NO ACTION',
+  onUpdate: 'NO ACTION',
+});
+// departmente
+
+// Roles
+Roles.hasMany(Users, {
+  foreignKey: 'role_fk',
   onDelete: 'NO ACTION',
   onUpdate: 'NO ACTION',
 });
@@ -11,6 +26,7 @@ Users.belongsTo(Roles, {
   onDelete: 'NO ACTION',
   onUpdate: 'NO ACTION',
 });
+// Roles
 
 /*
 No contexto de bancos de dados, has_many e belongs_to são termos que indicam diferentes tipos de associações entre modelos:

@@ -6,3 +6,4 @@ export * from "./returnData.model";
 
 // modelos
 export * from "./login.model";
+export * from "./despesas.model";
