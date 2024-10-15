@@ -28,7 +28,7 @@ export class loginService {
 
       if (user == null) {
         throw "erro ao buscar usuario";
-      } else if ((user.dataValues.email === email) && (verifyPass(String(user.dataValues.password))) === true) {
+      } else if ((user.dataValues.email === email) /* descomentar quando tiver crud de usuário -> && (verifyPass(String(user.dataValues.password))) === true*/) {
         dataUser.status = 200;
         
         dataUser.data = {
