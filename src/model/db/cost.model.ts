@@ -1,4 +1,4 @@
-import { sequelize } from "src/sequelize/config.sequelize";
+import { sequelize } from "../sequelize/config.sequelize";
 import { DATE, DECIMAL, INTEGER, STRING } from "sequelize";
 
 export const Cost = sequelize.define('cost', {

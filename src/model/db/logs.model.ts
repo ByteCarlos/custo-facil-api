@@ -1,4 +1,4 @@
-import { sequelize } from "src/sequelize/config.sequelize";
+import { sequelize } from "../sequelize/config.sequelize";
 import { DATE, INTEGER } from "sequelize";
 
 export const Logs = sequelize.define('logs', {
