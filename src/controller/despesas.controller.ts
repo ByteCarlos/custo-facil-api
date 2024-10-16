@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, Res, Query, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Query, Delete, Patch } from '@nestjs/common';
 import { despesasService } from '../service';
 import { Response, Request } from "express";
 import { returnData } from '../model';
@@ -51,6 +51,16 @@ export class despesasController {
   @Delete()
   deleteDespesa(@Query('id') id: number, @Res() res: Response, @Req() req: Request) {
     this.loginService.deleteDespesa(id).then((result: returnData) => {
+      if (result.status === 406 || result.status === 503) throw result;
+      res.status(result.status).send(result.message);
+    }).catch((err: returnData) => {
+      res.status(err.status).send(err.message);
+    });
+  }
+
+  @Patch('update')
+  updateDespesa(@Query('id') id: number, @Res() res: Response, @Req() req: Request) {
+    this.loginService.updateDespesa(id, req.body).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.message);
     }).catch((err: returnData) => {
