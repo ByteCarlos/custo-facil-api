@@ -8,7 +8,7 @@ require('dotenv/config');
 @Injectable()
 export class loginService {
   async loginUser(email: String, pass: String): Promise<Object> {
-    const dataUser = new returnData;
+    const dataUser = new returnData();
     await Users.findOne({
       // attributes: ['id', 'name', 'role_fk', 'department_fk'],
       where: {
@@ -16,7 +16,7 @@ export class loginService {
       },
       include: [Departments, Roles],
     }).then((user: Model<User>) => {
-      console.log(user);
+      // console.log(user);
 
       // fiz essa funcao mas normalmente adiciono condicoes que retornam booleano diretamente no if
       function verifyPass(passVerify: string): boolean {
@@ -34,8 +34,9 @@ export class loginService {
         dataUser.data = {
           nome: user.dataValues.name,
           department: user.dataValues.department.name,
+          departmentID: user.dataValues.department.id,
           role: user.dataValues.role.name,
-          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.name}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
+          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.id}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
         }
         
       } else {
