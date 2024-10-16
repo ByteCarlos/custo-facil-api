@@ -34,6 +34,7 @@ export class loginService {
         dataUser.data = {
           nome: user.dataValues.name,
           department: user.dataValues.department.name,
+          departmentID: user.dataValues.department.id,
           role: user.dataValues.role.name,
           token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.id}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
         }

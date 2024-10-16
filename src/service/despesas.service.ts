@@ -5,11 +5,9 @@ import { Cost, Costs, Category, MonthlyPeriod, Departments, returnData } from '.
 @Injectable()
 export class despesasService {
   async insertDespesas(data: Body & Costs): Promise<Object> {
-    // console.log(data);
-
     const insertCost = new Costs();
 
-    // inserir ternario caso nao tenha valor
+    // inserir ternario caso nao tenha valor - ainda julgando necessario
     insertCost.department_fk = data.department_fk;
     insertCost.monthly_period_fk = data.monthly_period_fk;
     insertCost.value = data.value;
@@ -22,11 +20,8 @@ export class despesasService {
 
     await Cost.create({
       ...insertCost,
-
-    }, {
       include: [Category, MonthlyPeriod, Departments],
     }).then((result) => {
-      // console.log(result);
 
       dataUser.status = 201;
       // aqui não é necessario dizer que é um tipo objeto já que esta sendo diretamente atribuido
@@ -35,12 +30,10 @@ export class despesasService {
       };
 
     }).catch((err: Error) => {
-      // console.log(err.message);
       if (err.name) {
         dataUser.status = 406;
         dataUser.message = "Erro ao inserir dados, revise os tipos\n" + err.message;
       } else {
-        // por hora não irei definir os tipos para retornar o status e o codigo de erro corretos
         dataUser.status = 503;
         dataUser.message = "Erro ao inserir dados, contate o ADM assim que possivel\n" + err.message;
       }
@@ -57,7 +50,6 @@ export class despesasService {
     await Cost.findAll({
       include: [Category, MonthlyPeriod, Departments],
     }).then((result: Model<Costs>[]) => {
-      // console.log(result);
       dataUser.status = 200;
       result.forEach((dataCost: Model<Costs>) => {
         (dataUser.data as Array<Object>).push(dataCost.dataValues);
@@ -69,12 +61,40 @@ export class despesasService {
         dataUser.status = 406;
         dataUser.message = "Erro ao requisitar dados\n" + err.message;
       } else {
-        // por hora não irei definir os tipos para retornar o status e o codigo de erro corretos
         dataUser.status = 503;
         dataUser.message = "Erro, contate o ADM assim que possivel\n" + err.message;
       }
     });
 
     return { ...dataUser };
+  }
+
+  async getWhereDepartmentDespesa(departmentID: number): Promise<Object> {
+    const dataUser = new returnData();
+    dataUser.data = [];
+
+    await Cost.findAll({
+      where: {
+        department_fk: departmentID,
+      },
+      include: [Category, MonthlyPeriod, Departments],
+    }).then((result: Model<Costs>[]) => {
+      dataUser.status = 200;
+      result.forEach((dataCost: Model<Costs>) => {
+        (dataUser.data as Array<Object>).push(dataCost.dataValues);
+      });
+
+    }).catch((err: Error) => {
+      console.log(err);
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao requisitar dados\n" + err.message;
+      } else {
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM assim que possivel\n" + err.message;
+      }
+    });
+
+    return {...dataUser};
   }
 }
