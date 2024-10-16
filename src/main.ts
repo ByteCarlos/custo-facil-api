@@ -1,9 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module/app.module';
-require('dotenv/config');
+import 'dotenv/config';
 
-const port: number | string = process.env.PORT_MAIN;
+async function bootstrap() {
+    const port: number | string = process.env.PORT_MAIN;
+    const app = await NestFactory.create(AppModule);
+    // Habilitar CORS
+    const whitelist: string[] = ['http://localhost:3000', 'https://custos-seduc.netlify.app'];
+    app.enableCors({
+        origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+            if (whitelist.indexOf(origin as string) !== -1 || !origin) {
+                callback(null, true);
+            } else {
+                callback(new Error('NÃO PERMITIDO PELO CORS'));
+            }
+        }
+    });
 
-NestFactory.create(AppModule, {cors: false}).then(app => {app.listen(port)});
 
-// forma padrão de utilização com um exemplo inicial
+    await app.listen(port);
+}
+bootstrap();
