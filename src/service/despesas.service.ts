@@ -144,4 +144,38 @@ export class despesasService {
 
     return {...dataUser};
   }
+
+  async updateDespesa(id: number, updateData: Object): Promise<Object>  {
+    const dataUser = new returnData();
+
+    await Cost.update({
+      ...updateData,
+    }, {
+      where: {id: id},
+    }).then((result: Array<number>) => {
+      console.log(result[0] !== 0);
+
+      if (result[0] === 1) {
+        dataUser.status = 200;
+        dataUser.message = "Despesa alterada"
+      } else {
+        dataUser.status = 404;
+        dataUser.message = "Despesa não encontrada ou não existe";
+      }
+      
+      
+    }).catch((err: Error) => {
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao deletar dados\n" + err.message;
+      } else {
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
+      }
+    });
+
+    return {...dataUser};
+  }
 }
+
+// colocar validador de tipo no metodo de inserção de dados (POST)
