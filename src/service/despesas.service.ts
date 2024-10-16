@@ -50,19 +50,18 @@ export class despesasService {
     await Cost.findAll({
       include: [Category, MonthlyPeriod, Departments],
     }).then((result: Model<Costs>[]) => {
-      dataUser.status = 200;
+      dataUser.status = 302;
       result.forEach((dataCost: Model<Costs>) => {
         (dataUser.data as Array<Object>).push(dataCost.dataValues);
       });
 
     }).catch((err: Error) => {
-      console.log(err);
       if (err.name) {
         dataUser.status = 406;
         dataUser.message = "Erro ao requisitar dados\n" + err.message;
       } else {
         dataUser.status = 503;
-        dataUser.message = "Erro, contate o ADM assim que possivel\n" + err.message;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
       }
     });
 
@@ -79,19 +78,67 @@ export class despesasService {
       },
       include: [Category, MonthlyPeriod, Departments],
     }).then((result: Model<Costs>[]) => {
-      dataUser.status = 200;
+      dataUser.status = 302;
       result.forEach((dataCost: Model<Costs>) => {
         (dataUser.data as Array<Object>).push(dataCost.dataValues);
       });
 
     }).catch((err: Error) => {
-      console.log(err);
       if (err.name) {
         dataUser.status = 406;
         dataUser.message = "Erro ao requisitar dados\n" + err.message;
       } else {
         dataUser.status = 503;
-        dataUser.message = "Erro, contate o ADM assim que possivel\n" + err.message;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
+      }
+    });
+
+    return {...dataUser};
+  }
+
+  async getWhereDespesaId(despesaID: number): Promise<Object> {
+    const dataUser = new returnData();
+
+    await Cost.findByPk(despesaID, {
+      include: [Category, MonthlyPeriod, Departments]
+    }).then((result: Model<Costs>) => {
+      dataUser.status = 302;
+      dataUser.data = {
+        ...result.dataValues
+      };
+
+    }).catch((err: Error) => {
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao requisitar dados\n" + err.message;
+      } else {
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
+      }
+    });
+
+    return {...dataUser};
+  }
+
+  async deleteDespesa(id: number): Promise<Object> {
+    const dataUser = new returnData();
+
+    await Cost.destroy({where: {id: id}}).then((result: number) => {
+      if (result !== 0) {
+        dataUser.status = 200;
+        dataUser.message = "Despesa deletada com sucesso";
+      } else {
+        dataUser.status = 404;
+        dataUser.message = "Despesa não encontrada";
+      }
+
+    }).catch((err: Error) => {
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao deletar dados\n" + err.message;
+      } else {
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
       }
     });
 
