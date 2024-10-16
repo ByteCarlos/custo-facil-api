@@ -3,28 +3,19 @@ import { Departments, Roles, Users } from './db';
 // departmente
 Departments.hasMany(Users, {
   foreignKey: 'department_fk',
-  onDelete: 'NO ACTION',
-  onUpdate: 'NO ACTION',
 });
 
 Users.belongsTo(Departments, {
   foreignKey: 'department_fk',
-  onDelete: 'NO ACTION',
-  onUpdate: 'NO ACTION',
 });
-// departmente
 
 // Roles
 Roles.hasMany(Users, {
   foreignKey: 'role_fk',
-  onDelete: 'NO ACTION',
-  onUpdate: 'NO ACTION',
 });
 
 Users.belongsTo(Roles, {
   foreignKey: 'role_fk',
-  onDelete: 'NO ACTION',
-  onUpdate: 'NO ACTION',
 });
 // Roles
 

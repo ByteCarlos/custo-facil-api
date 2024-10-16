@@ -1,5 +1,6 @@
 import { sequelize } from "../../sequelize/config.sequelize";
 import { INTEGER, STRING} from "sequelize";
+import { Roles, Departments } from "./";
 
 export const Users = sequelize.define('users', {
   id: {
@@ -32,3 +33,19 @@ export const Users = sequelize.define('users', {
   freezeTableName: true,
   timestamps: false,
 });
+
+// Users.belongsTo(Roles, { 
+//   foreignKey: 'role_fk' 
+// });
+
+// Users.belongsTo(Departments, { 
+//   foreignKey: 'department_fk' 
+// });
+
+// Roles.hasMany(Users, { 
+//   foreignKey: 'role_fk' 
+// });
+
+// Departments.hasMany(Users, { 
+//   foreignKey: 'department_fk' 
+// });

@@ -1,46 +1,28 @@
 import { Cost, Category, MonthlyPeriod, Departments } from './db';
 
-// category
-Category.belongsTo(Cost, {
-  foreignKey: "id",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION",
+Cost.belongsTo(Departments, { 
+  foreignKey: 'department_fk' 
 });
 
-Cost.hasMany(Category, {
-  foreignKey: "id",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION",
-});
-// category
-
-// department
-Departments.belongsTo(Cost, {
-  foreignKey: "id",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION", 
+Cost.belongsTo(MonthlyPeriod, { 
+  foreignKey: 'monthly_period_fk'
 });
 
-Cost.hasMany(Departments, {
-  foreignKey: "id",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION", 
-});
-// department
-
-// periodo mensal
-MonthlyPeriod.belongsTo(Cost, {
-  foreignKey: "id",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION", 
+Cost.belongsTo(Category, { 
+  foreignKey: 'category_fk' 
 });
 
-Cost.belongsTo(MonthlyPeriod, {
-  foreignKey: "id",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION", 
+Departments.hasMany(Cost, { 
+  foreignKey: 'department_fk' 
 });
-// periodo mensal
+
+MonthlyPeriod.hasMany(Cost, { 
+  foreignKey: 'monthly_period_fk' 
+});
+
+Category.hasMany(Cost, { 
+  foreignKey: 'category_fk' 
+});
 
 class Categorys {
   id: number;
