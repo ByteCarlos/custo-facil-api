@@ -24,8 +24,6 @@ export class despesasService {
     // insertCost.payment_date = data.payment_date;
     // insertCost.status = data.status;
 
-    console.log(data);
-
     const dataUser = new returnData();
 
     await Cost.bulkCreate(data).then((result) => {
@@ -57,6 +55,9 @@ export class despesasService {
     // adicionar 'raw: true' e verificar se ouve mudança no desempenho
     await Cost.findAll({
       include: [Category, MonthlyPeriod, Departments],
+      order: [
+        ['id', 'DESC'],
+      ],
     }).then((result: Model<Costs>[]) => {
       dataUser.status = 200;
       result.forEach((dataCost: Model<Costs>) => {
