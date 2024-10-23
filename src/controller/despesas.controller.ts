@@ -6,11 +6,12 @@ import { returnData } from '../model';
 @Controller('despesas')
 export class despesasController {
 
-  constructor (private readonly loginService: despesasService) {}
+  // é possivel colocar duas services em um construtor ", loginService: loginService"
+  constructor (private readonly despesasService: despesasService) {};
 
   @Post()
   insertDespesas(@Res() res: Response, @Req() req: Request) {
-    this.loginService.insertDespesas(req.body).then((result: returnData) => {
+    this.despesasService.insertDespesas(req.body).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
@@ -19,8 +20,8 @@ export class despesasController {
   }
 
   @Get()
-  getAllDespesas(@Res() res: Response, @Req() req: Request) {
-    this.loginService.getAllDepesas().then((result: returnData) => {
+  getAllDespesas(@Query('limit') limit: number, @Query('offset') offset: number, @Res() res: Response, @Req() req: Request) {
+    this.despesasService.getAllDepesas(limit, offset).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
@@ -30,7 +31,7 @@ export class despesasController {
 
   @Get('departamento')
   getWhereDepartmentDespesa(@Query('id') id: number, @Res() res: Response, @Req() req: Request) {
-    this.loginService.getWhereDepartmentDespesa(id).then((result: returnData) => {
+    this.despesasService.getWhereDepartmentDespesa(id).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
@@ -40,7 +41,7 @@ export class despesasController {
 
   @Get('despesa')
   getWhereDespesaId(@Query('id') id: number, @Res() res: Response, @Req() req: Request) {
-    this.loginService.getWhereDespesaId(id).then((result: returnData) => {
+    this.despesasService.getWhereDespesaId(id).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
@@ -50,7 +51,7 @@ export class despesasController {
 
   @Delete()
   deleteDespesa(@Query('id') id: number, @Res() res: Response, @Req() req: Request) {
-    this.loginService.deleteDespesa(id).then((result: returnData) => {
+    this.despesasService.deleteDespesa(id).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.message);
     }).catch((err: returnData) => {
@@ -60,9 +61,19 @@ export class despesasController {
 
   @Patch('update')
   updateDespesa(@Query('id') id: number, @Res() res: Response, @Req() req: Request) {
-    this.loginService.updateDespesa(id, req.body).then((result: returnData) => {
+    this.despesasService.updateDespesa(id, req.body).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.message);
+    }).catch((err: returnData) => {
+      res.status(err.status).send(err.message);
+    });
+  }
+
+  @Get('categorias')
+  getCategory(@Res() res: Response, @Req() req: Request) {
+    this.despesasService.getCategory().then((result: returnData) => {
+      if (result.status === 406 || result.status === 503) throw result;
+      res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
       res.status(err.status).send(err.message);
     });

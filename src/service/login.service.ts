@@ -21,14 +21,15 @@ export class loginService {
       // fiz essa funcao mas normalmente adiciono condicoes que retornam booleano diretamente no if
       function verifyPass(passVerify: string): boolean {
         const value: boolean = bcrypt.compareSync(String(pass), passVerify);
+        console.log(pass);
         // caso precisem criar senhas, apenas retirem esse comando do comentario e realizem uma req
-        // console.log(bcrypt.hashSync(String(pass), 10));
+        console.log(bcrypt.hashSync(String(pass), 10));
         return value;
       }
 
       if (user == null) {
         throw "erro ao buscar usuario";
-      } else if ((user.dataValues.email === email) /* descomentar quando tiver crud de usuário -> && (verifyPass(String(user.dataValues.password))) === true*/) {
+      } else if ((user.dataValues.email === email) && (verifyPass(String(user.dataValues.password)) === true)) {
         dataUser.status = 200;
         
         dataUser.data = {
@@ -43,7 +44,7 @@ export class loginService {
         throw "usuario ou senha incorreto";
       }
     }).catch((err: Error) => {
-      console.log(err);
+      // console.log(err);
       if (err.name) {
         dataUser.status = 503;
         dataUser.message = err.name;
