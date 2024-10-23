@@ -47,7 +47,7 @@ export class despesasService {
     return { ...dataUser };
   };
 
-  async getAllDepesas(): Promise<Object> {
+  async getAllDepesas(limit: number, offset: number): Promise<Object> {
     const dataUser = new returnData();
     //  aqui é necessario definir que é um array já que na classe returnData, data pode atribuir dois tipos. (quase uma super posição kkkk)
     dataUser.data = [];
@@ -58,6 +58,8 @@ export class despesasService {
       order: [
         ['id', 'DESC'],
       ],
+      limit: limit,
+      offset: offset,
     }).then((result: Model<Costs>[]) => {
       dataUser.status = 200;
       result.forEach((dataCost: Model<Costs>) => {

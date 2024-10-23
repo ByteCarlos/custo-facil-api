@@ -20,8 +20,8 @@ export class despesasController {
   }
 
   @Get()
-  getAllDespesas(@Res() res: Response, @Req() req: Request) {
-    this.despesasService.getAllDepesas().then((result: returnData) => {
+  getAllDespesas(@Query('limit') limit: number, @Query('offset') offset: number, @Res() res: Response, @Req() req: Request) {
+    this.despesasService.getAllDepesas(limit, offset).then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
