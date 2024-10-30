@@ -51,7 +51,7 @@ export class Costs {
   category_fk: number;
   insertion_date: Date;
   payment_date: Date;
-  ubmitted: Boolean;
+  submitted: Boolean;
   category: Categorys;
   department: Department;
   monthly_period: MonthlyPeriods;
