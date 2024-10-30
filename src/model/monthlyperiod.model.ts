@@ -11,7 +11,7 @@ Departments.hasMany(MonthlyPeriod, {
 class Department {
   id: number;
   name: String;
-  Description: String;
+  description: String;
 }
 
 export class MonthlyPeriods {
@@ -19,5 +19,5 @@ export class MonthlyPeriods {
   month_year: Date;
   open_date: Date;
   close_date: Date;
-  status: String;
+  status: Boolean;
 }
