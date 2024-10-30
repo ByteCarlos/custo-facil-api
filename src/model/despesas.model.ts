@@ -40,7 +40,7 @@ class MonthlyPeriods {
   month_year: Date;
   open_date: Date;
   close_date: Date;
-  status: String;
+  open: Boolean;
 }
 
 export class Costs {
@@ -51,7 +51,7 @@ export class Costs {
   category_fk: number;
   insertion_date: Date;
   payment_date: Date;
-  status: String;
+  ubmitted: Boolean;
   category: Categorys;
   department: Department;
   monthly_period: MonthlyPeriods;
