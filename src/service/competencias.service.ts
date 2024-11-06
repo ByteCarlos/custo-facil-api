@@ -32,7 +32,7 @@ export class competenciasService {
     dataUser.data = [];
 
     await MonthlyPeriod.findAll({
-      order: [['month_id', 'DESC']],
+      order: [['id', 'DESC']],
       limit: limit,
       offset: offset,
     })
@@ -81,7 +81,7 @@ export class competenciasService {
   async deleteMonthlyPeriod(id: number): Promise<Object> {
     const dataUser = new returnData();
 
-    await MonthlyPeriod.destroy({ where: { month_id: id } })
+    await MonthlyPeriod.destroy({ where: { id: id } })
       .then((result: number) => {
         if (result !== 0) {
           dataUser.status = 200;
@@ -107,7 +107,7 @@ export class competenciasService {
   async updateMonthlyPeriod(id: number, updateData: Object): Promise<Object> {
     const dataUser = new returnData();
 
-    await MonthlyPeriod.update({ ...updateData }, { where: { month_id: id } })
+    await MonthlyPeriod.update({ ...updateData }, { where: { id: id } })
       .then((result: Array<number>) => {
         if (result[0] === 1) {
           dataUser.status = 200;

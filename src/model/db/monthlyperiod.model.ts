@@ -1,5 +1,5 @@
 import { sequelize } from "../../sequelize/config.sequelize";
-import { DATEONLY, INTEGER, STRING } from "sequelize";
+import { DATEONLY, INTEGER, BOOLEAN } from "sequelize";
 
 export const MonthlyPeriod = sequelize.define('monthlyperiod', {
   id: {
@@ -20,8 +20,8 @@ export const MonthlyPeriod = sequelize.define('monthlyperiod', {
     type: DATEONLY,
     allowNull: true,
   },
-  status: {
-    type: STRING(10),
+  open: {
+    type: BOOLEAN,
     allowNull: true,
   }
 }, {
