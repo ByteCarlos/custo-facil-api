@@ -29,8 +29,8 @@ export const CostReport = sequelize.define('costreport', {
     type: DATE,
     allowNull: false,
   },
-  format: {
-    type: STRING(10),
+  cost_report_format_fk: {
+    type: INTEGER,
     allowNull: true,
   }
 }, {

@@ -1,5 +1,5 @@
 import { sequelize } from "../../sequelize/config.sequelize";
-import { DATE, DECIMAL, INTEGER, STRING } from "sequelize";
+import { DATE, DECIMAL, INTEGER, BOOLEAN } from "sequelize";
 
 export const Cost = sequelize.define('cost', {
   id: {
@@ -32,9 +32,9 @@ export const Cost = sequelize.define('cost', {
     type: DATE,
     allowNull: true,
   },
-  status: {
-    type: STRING(10),
-    allowNull: true,
+  submitted: {
+    type: BOOLEAN,
+    allowNull: false,
   },
 }, {
   freezeTableName: true,
