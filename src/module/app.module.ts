@@ -1,6 +1,6 @@
 import { Module, MiddlewareConsumer, RequestMethod  } from '@nestjs/common';
-import { AppController, loginController, despesasController } from '../controller';
-import { AppService, loginService, despesasService } from '../service';
+import { AppController, loginController, despesasController, relatoriosController } from '../controller';
+import { AppService, loginService, despesasService, relatoriosService } from '../service';
 import { CheckToken } from '../middleware/checkToken.middleware';
 
 // @Module({
@@ -11,8 +11,8 @@ import { CheckToken } from '../middleware/checkToken.middleware';
 // export class AppModule {}
 
 @Module({
-  controllers: [AppController, loginController, despesasController],
-  providers: [AppService, loginService, despesasService],
+  controllers: [AppController, loginController, despesasController, relatoriosController],
+  providers: [AppService, loginService, despesasService, relatoriosService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
