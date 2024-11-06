@@ -29,32 +29,24 @@ export class competenciasService {
 
   async getAllMonthlyPeriods(limit: number, offset: number): Promise<Object> {
     const dataUser = new returnData();
-    dataUser.data = [];
-
-    await MonthlyPeriod.findAll({
-      order: [['month_id', 'DESC']],
-      limit: limit,
-      offset: offset,
-    })
-      .then((result: Model<MonthlyPeriods>[]) => {
-        dataUser.status = 200;
-        result.forEach((dataPeriod: Model<MonthlyPeriods>) => {
-          (dataUser.data as Array<Object>).push(dataPeriod.dataValues);
-        });
-      })
-      .catch((err: Error) => {
-        if (err.name) {
-          dataUser.status = 406;
-          dataUser.message = "Erro ao requisitar dados\n" + err.message;
-        } else {
-          dataUser.status = 503;
-          dataUser.message = "Erro, contate o ADM\n" + err.message;
-        }
+    
+    try {
+      const result: Model<MonthlyPeriods>[] = await MonthlyPeriod.findAll({
+        order: [['month_id', 'DESC']],
+        limit,
+        offset,
       });
-
+  
+      dataUser.status = 200;
+      dataUser.data = result.map(period => period.dataValues);
+    } catch (err) {
+      dataUser.status = 406;
+      dataUser.message = `Erro ao requisitar dados\n${err.message}`;
+    }
+  
     return { ...dataUser };
   }
-
+  
   async getMonthlyPeriodById(monthId: number): Promise<Object> {
     const dataUser = new returnData();
 
