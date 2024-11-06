@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Error, Model } from "sequelize";
-import { Users, User, returnData, Departments, Roles} from "../model";
+import { Users, User, returnData, Departments, Roles, PermissoesUsers, Permissoes } from "../model";
 import * as bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken";
 require('dotenv/config');
@@ -14,14 +14,20 @@ export class loginService {
       where: {
         email: email
       },
-      include: [Departments, Roles],
+      include: [Departments, {
+        model: Roles,
+        include: [{
+          model: PermissoesUsers,
+          include: [Permissoes],
+        }],
+      }],
     }).then((user: Model<User>) => {
-      // console.log(user);
+      console.log(user.dataValues);
 
       // fiz essa funcao mas normalmente adiciono condicoes que retornam booleano diretamente no if
       function verifyPass(passVerify: string): boolean {
         const value: boolean = bcrypt.compareSync(String(pass), passVerify);
-        console.log(pass);
+        // console.log(pass);
         // caso precisem criar senhas, apenas retirem esse comando do comentario e realizem uma req
         console.log(bcrypt.hashSync(String(pass), 10));
         return value;
@@ -32,19 +38,21 @@ export class loginService {
       } else if ((user.dataValues.email === email) && (verifyPass(String(user.dataValues.password)) === true)) {
         dataUser.status = 200;
         
+        // será modificado para retornar apenas o necessário
         dataUser.data = {
-          nome: user.dataValues.name,
-          department: user.dataValues.department.name,
-          departmentID: user.dataValues.department.id,
-          role: user.dataValues.role.name,
-          token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.id}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
+          // nome: user.dataValues.name,
+          // department: user.dataValues.department.name,
+          // departmentID: user.dataValues.department.id,
+          // role: user.dataValues.role.name,
+          // token: jwt.sign({nome: user.dataValues.name, department: user.dataValues.department.id}, process.env.PASSWORD_JWT, { algorithm: 'HS256' }),
+          ...user.dataValues,
         }
         
       } else {
         throw "usuario ou senha incorreto";
       }
     }).catch((err: Error) => {
-      // console.log(err);
+      console.log(err);
       if (err.name) {
         dataUser.status = 503;
         dataUser.message = err.name;

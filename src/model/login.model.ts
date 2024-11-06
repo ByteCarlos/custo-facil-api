@@ -1,4 +1,4 @@
-import { Departments, Roles, Users } from './db';
+import { Departments, Permissoes, PermissoesUsers, Roles, Users } from './db';
 
 // departmente
 Departments.hasMany(Users, {
@@ -19,6 +19,29 @@ Users.belongsTo(Roles, {
 });
 // Roles
 
+// a associação da tabela permissões esta falhando
+// Permissoes
+// Users.hasMany(Roles, {
+//   foreignKey: 'role_fk',
+// });
+
+PermissoesUsers.belongsTo(Roles, {
+  foreignKey: 'role_fk',
+});
+
+Roles.hasMany(PermissoesUsers, {
+  foreignKey: 'role_fk',
+});
+
+Permissoes.hasMany(PermissoesUsers, {
+  foreignKey: 'permissao_fk',
+});
+
+PermissoesUsers.belongsTo(Permissoes, {
+  foreignKey: 'permissao_fk',
+});
+// Permissoes
+
 /*
 No contexto de bancos de dados, has_many e belongs_to são termos que indicam diferentes tipos de associações entre modelos:
 
@@ -33,9 +56,15 @@ class Department {
   description: String;
 }
 
+class PermissoesUser {
+  role_fk: number;
+  permissao_fk: number;
+}
+
 class Role {
   id: number;
   name: String;
+  permissoesusers: PermissoesUser;
 }
 
 export class User {
