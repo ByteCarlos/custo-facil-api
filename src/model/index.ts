@@ -9,3 +9,4 @@ export * from "./login.model";
 export * from "./despesas.model";
 export * from "./categoria.model";
 export * from "./monthlyperiod.model";
+export * from './departments.model';
