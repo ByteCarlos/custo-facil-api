@@ -1,6 +1,5 @@
 import { sequelize } from "../../sequelize/config.sequelize";
 import { DATE, INTEGER } from "sequelize";
-import { Users, Action } from './';
 
 export const Logs = sequelize.define('logs', {
   id: {
@@ -24,19 +23,3 @@ export const Logs = sequelize.define('logs', {
 }, {
   timestamps: false,
 });
-
-// Logs.belongsTo(Users, { 
-//   foreignKey: 'user_fk' 
-// });
-
-// Logs.belongsTo(Action, { 
-//   foreignKey: 'action_fk' 
-// });
-
-// Users.hasMany(Logs, { 
-//   foreignKey: 'user_fk' 
-// });
-
-// Action.hasMany(Logs, { 
-//   foreignKey: 'action_fk' 
-// });
