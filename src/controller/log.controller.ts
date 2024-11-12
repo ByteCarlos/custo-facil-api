@@ -8,13 +8,13 @@ export class logController {
 
   constructor (private readonly logService: logService) {};
 
-  // @Get('custosPorDepartamento')
-  // getCustosPorDepartamento(@Res() res: Response, @Req() _req: Request) {
-  //   this.relatoriosService.getCustosPorDepartamento().then((result: returnData) => {
-  //     if (result.status === 406 || result.status === 503) throw result;
-  //     res.status(result.status).send(result.data);
-  //   }).catch((err: returnData) => {
-  //     res.status(400).send(err);
-  //   });
-  // }
+  @Get()
+  getCustosPorDepartamento(@Res() res: Response, @Req() _req: Request) {
+    this.logService.getLogs().then((result: returnData) => {
+      if (result.status === 406 || result.status === 500) throw result;
+      res.status(result.status).send(result.data);
+    }).catch((err: returnData) => {
+      res.status(400).send(err);
+    });
+  }
 }
