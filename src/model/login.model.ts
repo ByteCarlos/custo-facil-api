@@ -56,15 +56,21 @@ class Department {
   description: String;
 }
 
-class PermissoesUser {
-  role_fk: number;
-  permissao_fk: number;
+export class Permisso {
+  id: number;
+  name: String;
+}
+
+export class PermissoesUser {
+  role_fk: number
+  permissao_fk: number
+  permisso: Permisso;
 }
 
 class Role {
   id: number;
   name: String;
-  permissoesusers: PermissoesUser;
+  permissoesusers: Array<PermissoesUser>;
 }
 
 export class User {
@@ -74,4 +80,35 @@ export class User {
   password: String;
   department: Department;
   role: Role;
+}
+
+class Payload {
+  nome: String;
+  email: String;
+  department: number;
+  permissionsusers: Array<PermissoesUser>;
+}
+
+export class Pages {
+  async PagesUser(permissoes: Array<PermissoesUser>): Promise<Array<Permisso>> {
+    let pages = new Array<Permisso>;
+    permissoes.map((val: PermissoesUser) => {pages.push(val.permisso)});
+    return pages;
+  }
+}
+
+export class Token {
+  
+  async tokenUser(nome: String, email: String, department: number, permissions?: Array<PermissoesUser>): Promise<Payload> {
+    return {
+      nome: nome,
+      email: email,
+      department: department,
+      permissionsusers: permissions,
+    }
+  }
+
+  async checkToken(payload: Payload) {
+    return this.tokenUser(payload.nome, payload.email, payload.department, payload.permissionsusers);
+  }
 }

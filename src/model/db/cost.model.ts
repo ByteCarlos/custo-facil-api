@@ -20,7 +20,7 @@ export const Cost = sequelize.define('cost', {
     type: DECIMAL(10, 2),
     allowNull: false,
   },
-  category_fk: {
+  produtos_fk: {
     type: INTEGER,
     allowNull: true,
   },

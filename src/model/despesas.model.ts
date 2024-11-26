@@ -1,4 +1,4 @@
-import { Cost, Category, MonthlyPeriod, Departments } from './db';
+import { Cost, Category, MonthlyPeriod, Departments, Produtos } from './db';
 
 Cost.belongsTo(Departments, { 
   foreignKey: 'department_fk' 
@@ -8,9 +8,9 @@ Cost.belongsTo(MonthlyPeriod, {
   foreignKey: 'monthly_period_fk'
 });
 
-Cost.belongsTo(Category, { 
-  foreignKey: 'category_fk' 
-});
+// Cost.belongsTo(Category, { 
+//   foreignKey: 'category_fk' 
+// });
 
 Departments.hasMany(Cost, { 
   foreignKey: 'department_fk' 
@@ -20,13 +20,27 @@ MonthlyPeriod.hasMany(Cost, {
   foreignKey: 'monthly_period_fk' 
 });
 
-Category.hasMany(Cost, { 
-  foreignKey: 'category_fk' 
+// Category.hasMany(Cost, { 
+//   foreignKey: 'category_fk' 
+// });
+
+// class Categorys {
+//   id: number;
+//   name: String;
+// }
+
+Cost.belongsTo(Produtos, {
+  foreignKey: 'produtos_fk'
 });
 
-class Categorys {
+Produtos.hasMany(Cost, {
+  foreignKey: 'produtos_fk',
+});
+
+class Produto {
   id: number;
-  name: String;
+  nome: String;
+  category_id: number;
 }
 
 class Department {
@@ -48,11 +62,12 @@ export class Costs {
   department_fk: number;
   monthly_period_fk: number;
   value: number;
-  category_fk: number;
+  produtos_fk: number;
   insertion_date: Date;
   payment_date: Date;
   submitted: Boolean;
-  category: Categorys;
+  // category: Categorys;
+  produto: Produto;
   department: Department;
   monthly_period: MonthlyPeriods;
 }
