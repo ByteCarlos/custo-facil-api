@@ -26,7 +26,7 @@ export class logService {
                 ],
                 order: [['log_timestamp', 'DESC']]
             });
-            
+
             dataLog.status = 200;
             dataLog.data = logs;
 
