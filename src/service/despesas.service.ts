@@ -7,7 +7,8 @@ import {
   MonthlyPeriod, 
   Departments, 
   returnData, 
-  categoria ,
+  categoria,
+  Produtos,
 } from '../model';
 
 @Injectable()
@@ -26,14 +27,22 @@ export class despesasService {
 
     const dataUser = new returnData();
 
-    await Cost.bulkCreate(data).then((result) => {
+    // versão antiga porem visando retornar para realizar validação dos dados 
+    // a ideia e reutilizar usando recursividade para validar a entrada do array de objetos
+    // await Cost.create({
+    //   ...insertCost,
+    //   include: [Category, MonthlyPeriod, Departments],
+    // }).
 
+    // versão atual
+    // await Cost.bulkCreate(data).
+
+    await Cost.bulkCreate(data).then((result) => {
       dataUser.status = 201;
       // aqui não é necessario dizer que é um tipo objeto já que esta sendo diretamente atribuido
       dataUser.data = {
         msg: "Dados inseridos",
       };
-
     }).catch((err: Error) => {
       if (err.name) {
         dataUser.status = 406;
@@ -54,7 +63,7 @@ export class despesasService {
 
     // adicionar 'raw: true' e verificar se ouve mudança no desempenho
     await Cost.findAll({
-      include: [Category, MonthlyPeriod, Departments],
+      include: [Produtos, MonthlyPeriod, Departments],
       order: [
         ['id', 'DESC'],
       ],
@@ -86,7 +95,7 @@ export class despesasService {
       where: {
         department_fk: departmentID,
       },
-      include: [Category, MonthlyPeriod, Departments],
+      include: [Produtos, MonthlyPeriod, Departments],
     }).then((result: Model<Costs>[]) => {
       dataUser.status = 200;
       result.forEach((dataCost: Model<Costs>) => {
@@ -110,7 +119,7 @@ export class despesasService {
     const dataUser = new returnData();
 
     await Cost.findByPk(despesaID, {
-      include: [Category, MonthlyPeriod, Departments]
+      include: [Produtos, MonthlyPeriod, Departments]
     }).then((result: Model<Costs>) => {
       dataUser.status = 200;
       dataUser.data = {
@@ -194,6 +203,29 @@ export class despesasService {
     dataUser.data = [];
 
     await Category.findAll().then((result: Model<categoria>[]) => {
+      dataUser.status = 200;
+      result.forEach((dataCost: Model<categoria>) => {
+        (dataUser.data as Array<Object>).push(dataCost.dataValues);
+      });
+    }).catch((err: Error) => {
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao requisitar categorias\n" + err.message;
+      } else {
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
+      }
+    });
+
+    return { ...dataUser };
+  }
+
+  // adicionado para buscar todos os produtos
+  async getProdutos(): Promise<Object> {
+    const dataUser = new returnData();
+    dataUser.data = [];
+
+    await Produtos.findAll().then((result: Model<categoria>[]) => {
       dataUser.status = 200;
       result.forEach((dataCost: Model<categoria>) => {
         (dataUser.data as Array<Object>).push(dataCost.dataValues);

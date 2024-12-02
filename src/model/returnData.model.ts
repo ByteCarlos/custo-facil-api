@@ -7,5 +7,5 @@ export class returnData {
     this.status = this.status;
     this.data = undefined;
     this.message = this.message;
-}
+  }
 }

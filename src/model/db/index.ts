@@ -8,3 +8,6 @@ export * from "./costreport.model";
 export * from "./logs.model";
 export * from "./monthlyperiod.model";
 export * from "./costreportformat.model";
+export * from "./permissoes.model";
+export * from "./permissoesUsers.model";
+export * from "./produtos.model";

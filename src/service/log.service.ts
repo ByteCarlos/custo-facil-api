@@ -24,9 +24,11 @@ export class logService {
                         attributes: ['id', 'name']
                     }
                 ],
-                order: [['log_timestamp', 'DESC']]
+                order: [['log_timestamp', 'DESC']],
+                limit: 10,
+                offset: 0,
             });
-            
+
             dataLog.status = 200;
             dataLog.data = logs;
 
