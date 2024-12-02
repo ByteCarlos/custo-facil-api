@@ -219,6 +219,29 @@ export class despesasService {
 
     return { ...dataUser };
   }
+
+  // adicionado para buscar todos os produtos
+  async getProdutos(): Promise<Object> {
+    const dataUser = new returnData();
+    dataUser.data = [];
+
+    await Produtos.findAll().then((result: Model<categoria>[]) => {
+      dataUser.status = 200;
+      result.forEach((dataCost: Model<categoria>) => {
+        (dataUser.data as Array<Object>).push(dataCost.dataValues);
+      });
+    }).catch((err: Error) => {
+      if (err.name) {
+        dataUser.status = 406;
+        dataUser.message = "Erro ao requisitar categorias\n" + err.message;
+      } else {
+        dataUser.status = 503;
+        dataUser.message = "Erro, contate o ADM\n" + err.message;
+      }
+    });
+
+    return { ...dataUser };
+  }
 }
 
 // colocar validador de tipo no metodo de inserção de dados (POST)

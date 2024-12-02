@@ -22,14 +22,16 @@ export class monthlyPeriodController {
 
   @Get()
   getAllMonthlyPeriods(@Query('limit') limit: number, @Query('offset') offset: number, @Res() res: Response, @Req() req: Request) {
-    this.monthlyPeriodService.getAllMonthlyPeriods(limit, offset)
-      .then((result: returnData) => {
+    if ((limit === undefined) || (offset === undefined)) {
+      res.status(200).end();
+    } else {
+      this.monthlyPeriodService.getAllMonthlyPeriods(limit, offset).then((result: returnData) => {
         if (result.status === 406 || result.status === 503) throw result;
         res.status(result.status).send(result.data);
-      })
-      .catch((err: returnData) => {
+      }).catch((err: returnData) => {
         res.status(err.status).send(err.message);
       });
+    }
   }
 
   @Get('monthly-period')

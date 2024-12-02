@@ -6,8 +6,10 @@ import {
     Category,
     MonthlyPeriod,
     Departments,
-    returnData
+    returnData,
+    Produtos
 } from '../model';
+import { sequelize } from "../sequelize/config.sequelize";
 
 @Injectable()
 export class relatoriosService {
@@ -18,33 +20,53 @@ export class relatoriosService {
         const dataUser = new returnData();
         dataUser.data = [];
         try {
-            const result: any = await Cost.findAll({
-                attributes: [
-                    [Sequelize.col('department.name'), 'departamento'],
-                    [Sequelize.col('category.name'), 'categoria'],
-                    [Sequelize.fn('SUM', Sequelize.col('cost.value')), 'custoTotal']
-                ],
-                include: [
-                    {
-                        model: Departments,
-                        attributes: [],
-                        required: true
-                    },
-                    {
-                        model: Category,
-                        attributes: [],
-                        required: true
-                    },
-                ],
-                group: ['department.name', 'category.name'],
+            // const result: any = await Cost.findAll({
+            //     attributes: [
+            //         [Sequelize.col('department.name'), 'departamento'],
+            //         [Sequelize.col('produtos.nome'), 'produtos'],
+            //         [Sequelize.fn('SUM', Sequelize.col('cost.value')), 'custoTotal']
+            //     ],
+            //     include: [
+            //         {
+            //             model: Departments,
+            //             attributes: [],
+            //             required: true,
+            //         },
+            //         // {
+            //         //     model: Category,
+            //         //     attributes: [],
+            //         //     required: true,
+            //         // },
+            //         {
+            //             model: Produtos,
+            //             attributes: [],
+            //             required: true,
+            //             as: "produtos",
+            //         },
+            //     ],
+            //     group: ['department.name', 'produtos.nome'],
+            //     raw: true,
+            // });
+            const result: any = await sequelize.query(`
+                SELECT 
+	                "department"."name" AS "departamento", 
+	                "produtos"."nome" AS "produtos", 
+	                SUM("cost"."value") AS "custoTotal" 
+                FROM "custos"."cost" AS "cost" 
+                INNER JOIN "custos"."department" AS "department" ON "cost"."department_fk" = "department"."id" 
+                INNER JOIN "custos"."produtos" AS "produtos" ON "cost"."produtos_fk" = "produtos"."id" 
+                GROUP BY "department"."name", "produtos"."nome";
+            `, {
                 raw: true,
             });
+
+            // console.log(result[0]);
 
             // Formatação dos dados para organizar no charts
             const departamentosMap = new Map();
 
-            result.forEach((item) => {
-                const { departamento, categoria, custoTotal } = item;
+            result[0].forEach((item) => {
+                const { departamento, produtos, custoTotal } = item;
 
                 if (!departamentosMap.has(departamento)) {
                     departamentosMap.set(departamento, {
@@ -54,7 +76,7 @@ export class relatoriosService {
                 }
 
                 departamentosMap.get(departamento).custos.push({
-                    categoria: categoria,
+                    produtos: produtos,
                     total: parseFloat(custoTotal) || 0,
                 });
             });
@@ -64,6 +86,7 @@ export class relatoriosService {
 
             return dataUser;
         } catch (err) {
+            // console.log(err);
             dataUser.status = 500;
             dataUser.message = "Erro ao calcular custos por departamento e categoria: " + err.message;
             return dataUser;
@@ -82,39 +105,58 @@ export class relatoriosService {
             const seisMesesAtras = new Date();
             seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6);
 
-            const result: any = await Cost.findAll({
-                attributes: [
-                    [Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('insertion_date')), 'mes'], // Agrupa por mes
-                    [Sequelize.col('category.name'), 'categoria'],
-                    [Sequelize.fn('SUM', Sequelize.col('cost.value')), 'custoTotal'] // Soma dos custos
-                ],
-                where: {
-                    department_fk: departamentId, // Filtro por departamento
-                    insertion_date: {
-                        [Op.gte]: seisMesesAtras, // Restringe para apresentar somente os últimos 6 meses
-                    },
-                },
-                include: [
-                    {
-                        model: Category,
-                        attributes: [],
-                        required: true,
-                    },
-                ],
-                group: [
-                    Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('insertion_date')),
-                    'category.name'
-                ],
-                order: [[Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('insertion_date')), 'ASC']],
+            // const result: any = await Cost.findAll({
+            //     attributes: [
+            //         [Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('insertion_date')), 'mes'], // Agrupa por mes
+            //         [Sequelize.col('produtos.nome'), 'produtos'],
+            //         [Sequelize.fn('SUM', Sequelize.col('cost.value')), 'custoTotal'] // Soma dos custos
+            //     ],
+            //     where: {
+            //         produtos_fk: departamentId, // Filtro por departamento
+            //         insertion_date: {
+            //             [Op.gte]: seisMesesAtras, // Restringe para apresentar somente os últimos 6 meses
+            //         },
+            //     },
+            //     include: [
+            //         // {
+            //         //     model: Category,
+            //         //     attributes: [],
+            //         //     required: true,
+            //         // },
+            //         {
+            //             model: Produtos,
+            //             attributes: [],
+            //             required: true,
+            //         },
+            //     ],
+            //     group: [
+            //         Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('insertion_date')),
+            //         'produtos.nome'
+            //     ],
+            //     order: [[Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('insertion_date')), 'ASC']],
+            //     raw: true,
+            // });
+            // console.log(seisMesesAtras.toISOString());
+            const result: any = await sequelize.query(`
+                SELECT 
+	                DATE_TRUNC('month', "insertion_date") AS "mes", 
+	                "produtos"."nome" AS "produtos", 
+	                SUM("cost"."value") AS "custoTotal" 
+                FROM "custos"."cost" AS "cost" 
+                INNER JOIN "custos"."produtos" AS "produtos" ON "cost"."produtos_fk" = "produtos"."id" 
+                WHERE "cost"."department_fk" = '${departamentId}' AND "cost"."insertion_date" >= '${seisMesesAtras.toISOString()}' 
+                GROUP BY DATE_TRUNC('month', "insertion_date"), "produtos"."nome" 
+                ORDER BY DATE_TRUNC('month', "insertion_date") ASC;
+            `, {
                 raw: true,
             });
 
 
             // Formatação dos dados
-            const tendencia: { [key: string]: { categoria: string, custoTotal: number }[] } = {};
+            const tendencia: { [key: string]: { produtos: string, custoTotal: number }[] } = {};
 
-            result.forEach((item) => {
-                const { mes, categoria, custoTotal } = item;
+            result[0].forEach((item) => {
+                const { mes, produtos, custoTotal } = item;
                 const mesString = new Date(mes).toISOString().slice(0, 7); // Formato YYYY-MM
 
                 if (!tendencia[mesString]) {
@@ -122,7 +164,7 @@ export class relatoriosService {
                 }
 
                 tendencia[mesString].push({
-                    categoria,
+                    produtos,
                     custoTotal: parseFloat(custoTotal) || 0,
                 });
             });
@@ -135,6 +177,7 @@ export class relatoriosService {
             dataUser.status = 200;
             return dataUser;
         } catch (err) {
+            // console.log(err);
             dataUser.status = 500;
             dataUser.message = "Erro ao calcular tendência de custo do departamento: " + err.message;
             return dataUser;

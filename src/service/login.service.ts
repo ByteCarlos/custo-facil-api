@@ -50,7 +50,7 @@ export class loginService {
           department: user.dataValues.department.name,
           departmentID: user.dataValues.department.id,
           role: user.dataValues.role.name,
-          pages: await new Pages().PagesUser(user.dataValues.role.permissoesusers),
+          // pages: await new Pages().PagesUser(user.dataValues.role.permissoesusers),
           
           // versão antiga do token, manterei por hr apenas para certeza de não precisar de mais nada futuramente
           // token: jwt.sign({

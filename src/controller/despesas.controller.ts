@@ -21,12 +21,16 @@ export class despesasController {
 
   @Get()
   getAllDespesas(@Query('limit') limit: number, @Query('offset') offset: number, @Res() res: Response, @Req() req: Request) {
-    this.despesasService.getAllDepesas(limit, offset).then((result: returnData) => {
-      if (result.status === 406 || result.status === 503) throw result;
-      res.status(result.status).send(result.data);
-    }).catch((err: returnData) => {
-      res.status(err.status).send(err.message);
-    });
+    if ((limit === undefined) || (offset === undefined)) {
+      res.status(200).end();
+    } else {
+      this.despesasService.getAllDepesas(limit, offset).then((result: returnData) => {
+        if (result.status === 406 || result.status === 503) throw result;
+        res.status(result.status).send(result.data);
+      }).catch((err: returnData) => {
+        res.status(err.status).send(err.message);
+      });
+    }
   }
 
   @Get('departamento')
@@ -72,6 +76,18 @@ export class despesasController {
   @Get('categorias')
   getCategory(@Res() res: Response, @Req() req: Request) {
     this.despesasService.getCategory().then((result: returnData) => {
+      if (result.status === 406 || result.status === 503) throw result;
+      res.status(result.status).send(result.data);
+    }).catch((err: returnData) => {
+      res.status(err.status).send(err.message);
+    });
+  }
+
+  // agora as despesas buscam os produtos e não as categorias dos produtos
+  // por hora não apagar a rota de categorias, pode ser util no futuro
+  @Get('produtos')
+  getProdutos(@Res() res: Response, @Req() req: Request) {
+    this.despesasService.getProdutos().then((result: returnData) => {
       if (result.status === 406 || result.status === 503) throw result;
       res.status(result.status).send(result.data);
     }).catch((err: returnData) => {
